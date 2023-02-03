@@ -1,0 +1,70 @@
+% 1. on weekends i don't watch tv
+% 2. i'm happy when it rains, except in the weekend
+% 3. im watching tv but i'm not happy
+% C. it is not raining
+
+% choice rules
+{w;tv;h;r}.
+
+
+% constraints
+
+% 1. w -> tv
+:- w, tv.
+
+% 2. r /\ w -> h
+:- r, not w, not h.
+
+% 3. tv /\ ¬h
+:- not tv.
+:- h.
+
+%Answer: 1
+%tv
+%SATISFIABLE
+
+% thus, the initial conclusion is satisfiable
+
+
+% for more complex values, we need to ensure no counterexamples exist
+% this can be done by _reductio ad absurdum_ negating the conclusion
+
+% ¬(¬r)
+:- r
+
+
+
+%% LADY & THE TIGER
+
+{t1;t2;p1;p2}.
+
+% p1 <-> (¬t1 /\ t2)
+:- not t1, t2, not p1.
+:- p1, t1.
+:- p1, not t2.
+
+% (t1 /\ ¬t2) \/ (¬t1 /\ t2) <-> p2
+% t1 xor t2 <-> p2
+:- t1, not t2, not p2.
+:- t2, not t1, not p2.
+:- p2, t1, t2.
+:- p2, not t1, not t2.
+
+% p1 xor p2
+:- p1, p2.
+:- not p1, not p2.
+
+
+
+%% XOR
+
+% X {;;} Y.
+% X -> minimum, Y -> maximum
+
+
+1 {d1;d2;d3} 1.
+1 {p1,p2,p3} 1.
+
+% d1 <-> p1
+% d2 <-> p2
+% ¬d2 <-> p3
