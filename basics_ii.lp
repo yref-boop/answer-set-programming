@@ -1,7 +1,6 @@
 % install clingraph(pip)
 % (graphviz fst)
 
-
 % generar cartas de poker:
 rango(2..10;as;j;q;k).
 palo(diamante;trebol;corazon;pica).
