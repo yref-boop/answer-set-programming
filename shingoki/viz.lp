@@ -5,7 +5,7 @@ def pos(x,y):
 #end.
 
 viz_node((X,Y)) :- size(N),X=0..N-1,Y=0..N-1.
-viz_edge((I,J)) :- seg(I,J).
+viz_edge((I,J)) :- segment(I,J).
 viz_attr(graph_nodes, default, shape, circle).
 viz_attr(graph_nodes, default, style, filled).
 viz_attr(graph_nodes, default, width, "0.1").
