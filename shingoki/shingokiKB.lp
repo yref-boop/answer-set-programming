@@ -15,6 +15,11 @@ adjacent ((X, Y), (X, Y+1)) :- row (X), column (Y), column (Y+1).
 % bidirectional segments are prefered
 edge (Q,P) :- edge (P,Q).
 
+% unidirectional segment used for graphical representation
+segment (P,Q) :- edge (P,Q), P < Q.
+
+
+% all edges must for a single linear loop, no crossing or branching is allowed
 
 % check that, if node is used, it has two edges
 used (P) :- edge (P,_).
@@ -22,24 +27,11 @@ used (P) :- edge (P,_).
     % used (P) :- edge (_,P).
 :- used (P), #count {Q: edge (P,Q)} != 2.
 
-segment (P,Q) :- edge (P,Q), P < Q.
-
-%ensure only one cycle
-% implement reach ((X,Y), #min bolas).
-
-%total (S) :- #sum{X, M: income (M,X)} = S.
-
-% linear loops (no branching or crossing)
-
-% loop must go through all numbered circles
+% all numbered circles must be in a loop
 ball (B) :- number (B,N), N != 0.
 :- ball (B), not used (B).
 
-% white circles must be passed through a straight line
-% si algo esta alineado y tengo una arista a ese punto siguiendo la misma linea, entonces ese tmb esta alineado
-
-%aligned (B, P) :- ball (B), edge (B,P).
-
-% black circles must be in a corner of a turn
-
-% the number on each circle must be the sum of the lengths of the 2 straight segments going out that circle
+% there must be only one loop
+connected (X, Y) :- edge (X, Y).
+connected (X, Z) :- connected (X, Y), edge (Y, Z).
+:- ball (B), ball (B'), B' != B, not connected (B, B').
