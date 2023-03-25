@@ -36,8 +36,8 @@ connected (X, Z) :- connected (X, Y), edge (Y, Z).
 
 
 % white (positive) circles must be passed through a straight line
-vertical (P)   :- edge (P, (X,Y)), edge (P, (X',Y')), |X-X'| == 2.
 horizontal (P) :- edge (P, (X,Y)), edge (P, (X',Y')), |Y-Y'| == 2.
+vertical (P)   :- edge (P, (X,Y)), edge (P, (X',Y')), |X-X'| == 2.
 
 straight (P) :- vertical (P).
 straight (P) :- horizontal (P).
@@ -50,10 +50,9 @@ straight (P) :- horizontal (P).
 
 % the number on each circle represents the length of the
 % 2 straight lines going trough the circle
+axis_aligned (P, B) :- horizontal(B), horizontal(P), edge(B,(BX,BY)), edge(P,(PX,YX)), BX==PX.
+axis_aligned (P, B) :- vertical(B), vertical(P), edge(B,(BX,BY)), edge(P,(PX,YX)), BY==PY.
 
-% adjacent / %connected
+contiguous (P, B) :- axis_aligned (P, B).
 
-%aligned (P, B) :- vertical (B), vertical (P).
-%aligned (P, B) :- horizontal (B), horizontal (P).
-
-%:- number (B, N), N > 1, #count {Q: aligned (Q, B)} == N.
+:- number (B, N), N > 1, #count {P: contiguous (P, B)} != N+1.
