@@ -19,8 +19,6 @@ edge (Q,P) :- edge (P,Q).
 segment (P,Q) :- edge (P,Q), P < Q.
 
 
-% all edges must for a single linear loop, no crossing or branching is allowed
-
 % check that, if node is used, it has two edges
 used (P) :- edge (P,_).
     % used needen't be biyective because edge already is
@@ -35,3 +33,13 @@ ball (B) :- number (B,N), N != 0.
 connected (X, Y) :- edge (X, Y).
 connected (X, Z) :- connected (X, Y), edge (Y, Z).
 :- ball (B), ball (B'), B' != B, not connected (B, B').
+
+% white (positive) circles must be passed through a straight line
+aligned (P) :- edge (P, (X,Y)), edge (P, (X',Y')), |X-X'| == 2.
+aligned (P) :- edge (P, (X,Y)), edge (P, (X',Y')), |Y-Y'| == 2.
+
+:- number (B, N), N > 1, not aligned (B).
+
+
+
+
