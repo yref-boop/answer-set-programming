@@ -40,6 +40,6 @@ aligned (P) :- edge (P, (X,Y)), edge (P, (X',Y')), |Y-Y'| == 2.
 
 :- number (B, N), N > 1, not aligned (B).
 
-
-
+% black (negative) circles must be located in a corner
+:- number (B, N), N < 0, aligned (B).
 
