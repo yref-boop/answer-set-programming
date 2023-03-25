@@ -34,12 +34,26 @@ connected (X, Y) :- edge (X, Y).
 connected (X, Z) :- connected (X, Y), edge (Y, Z).
 :- ball (B), ball (B'), B' != B, not connected (B, B').
 
-% white (positive) circles must be passed through a straight line
-aligned (P) :- edge (P, (X,Y)), edge (P, (X',Y')), |X-X'| == 2.
-aligned (P) :- edge (P, (X,Y)), edge (P, (X',Y')), |Y-Y'| == 2.
 
-:- number (B, N), N > 1, not aligned (B).
+% white (positive) circles must be passed through a straight line
+vertical (P)   :- edge (P, (X,Y)), edge (P, (X',Y')), |X-X'| == 2.
+horizontal (P) :- edge (P, (X,Y)), edge (P, (X',Y')), |Y-Y'| == 2.
+
+straight (P) :- vertical (P).
+straight (P) :- horizontal (P).
+
+:- number (B, N), N > 1, not straight (B).
 
 % black (negative) circles must be located in a corner
-:- number (B, N), N < 0, aligned (B).
+:- number (B, N), N < 0, straight (B).
 
+
+% the number on each circle represents the length of the
+% 2 straight lines going trough the circle
+
+% adjacent / %connected
+
+%aligned (P, B) :- vertical (B), vertical (P).
+%aligned (P, B) :- horizontal (B), horizontal (P).
+
+%:- number (B, N), N > 1, #count {Q: aligned (Q, B)} == N.
