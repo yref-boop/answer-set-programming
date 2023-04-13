@@ -29,10 +29,13 @@ used (P) :- edge (P,_).
 ball (B) :- number (B,N), N != 0.
 :- ball (B), not used (B).
 
+% get first ball
+first (B) :- B = #min {B': ball (B')}.
+
 % there must be only one loop
 connected (X, Y) :- edge (X, Y).
 connected (X, Z) :- connected (X, Y), edge (Y, Z).
-:- ball (B), ball (B'), B' != B, not connected (B, B').
+:- ball (B), first (B'), B != B', not connected (B, B').
 
 
 % white (positive) circles must be passed through a straight line
@@ -46,13 +49,3 @@ straight (P) :- horizontal (P).
 
 % black (negative) circles must be located in a corner
 :- number (B, N), N < 0, straight (B).
-
-
-% the number on each circle represents the length of the
-% 2 straight lines going trough the circle
-axis_aligned (P, B) :- horizontal(B), horizontal(P), edge(B,(BX,BY)), edge(P,(PX,YX)), BX==PX.
-axis_aligned (P, B) :- vertical(B), vertical(P), edge(B,(BX,BY)), edge(P,(PX,YX)), BY==PY.
-
-contiguous (P, B) :- axis_aligned (P, B).
-
-:- number (B, N), N > 1, #count {P: contiguous (P, B)} != N+1.
