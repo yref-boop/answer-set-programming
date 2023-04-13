@@ -37,6 +37,8 @@ connected (X, Y) :- edge (X, Y).
 connected (X, Z) :- connected (X, Y), edge (Y, Z).
 :- ball (B), first (B'), B != B', not connected (B, B').
 
+% Connected all edges with first ball. This way, we only have one loop
+:- first(B), used(S), not connected(B,S).
 
 % white (positive) circles must be passed through a straight line
 horizontal (P) :- edge (P, (X,Y)), edge (P, (X',Y')), |Y-Y'| == 2.
@@ -50,6 +52,18 @@ straight (P) :- horizontal (P).
 % black (negative) circles must be located in a corner
 :- number (B, N), N < 0, straight (B).
 
-% Asegurarse de que los círculos numerados estén conectados solo a través de líneas rectas, es decir, evitamos que haya varios loops
-:- ball(B), straight(B), not used(B).
-:- ball(B), not straight(B), #count{X:edge(B,X)}!=2.
+
+
+% the number on each ball represents length of its two lines
+
+% check if two points are on the same axis (+)
+axis_aligned (P, B) :- straight (P), edge (B, (BX,_)), edge (P, (PX,_)), BX == PX.
+axis_aligned (P, B) :- straight (P), edge (B, (_,BY)), edge (P, (_,PY)), BY == PY.
+
+% connected without corners
+contiguous (P, B) :- edge (P, B).
+contiguous (P, B) :- axis_aligned (P, B), straight (P'), edge (P', P), contiguous (P', B).
+
+% count itself
+:- number (B, N), N > 1, #count {P: contiguous (P, B)} != N.
+
