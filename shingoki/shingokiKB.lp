@@ -49,3 +49,7 @@ straight (P) :- horizontal (P).
 
 % black (negative) circles must be located in a corner
 :- number (B, N), N < 0, straight (B).
+
+% Asegurarse de que los círculos numerados estén conectados solo a través de líneas rectas, es decir, evitamos que haya varios loops
+:- ball(B), straight(B), not used(B).
+:- ball(B), not straight(B), #count{X:edge(B,X)}!=2.
