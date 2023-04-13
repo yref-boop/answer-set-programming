@@ -49,3 +49,17 @@ straight (P) :- horizontal (P).
 
 % black (negative) circles must be located in a corner
 :- number (B, N), N < 0, straight (B).
+
+
+% the number on each ball represents length of its two lines
+
+% check if two points are on the same axis (+)
+axis_aligned (P, B) :- straight (P), edge (B, (BX,_)), edge (P, (PX,_)), BX == PX.
+axis_aligned (P, B) :- straight (P), edge (B, (_,BY)), edge (P, (_,PY)), BY == PY.
+
+% connected without corners
+contiguous (P, B) :- edge (P, B).
+contiguous (P, B) :- axis_aligned (P, B), straight (P'), edge (P', P), contiguous (P', B).
+
+% count itself
+:- number (B, N), N > 1, #count {P: contiguous (P, B)} != N.
