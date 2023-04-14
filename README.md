@@ -13,8 +13,8 @@ some grid points contain numbers that can be either black or white & the puzzle 
 in our case we can assume that the number of rows & columns coincide (all grids are square grids of N x N, where N >= 0)
 
 ### code structure
-#### knowledge base (shingokiKB.lp)
-encode the shingoki problem as an ASP program that solves the puzzle for any instance
+
+
 
 #### encoder (encode.py)
 python program that takes the shingokiX.txt file as an input and creates an instance file describing the instance as a set of ASP facts
@@ -22,7 +22,15 @@ python program that takes the shingokiX.txt file as an input and creates an inst
 this instance file cannot contain rules or constraints
 
 execution example:
-```python3 encode.py <shingoki1.txt> shingoki1.lp```
+```python3 encode.py <shingoki-example.txt>```
+
+
+#### knowledge base (shingokiKB.lp)
+encode the shingoki problem as an ASP program that solves the puzzle for any instance
+
+execution example:
+```clingo shingokiKB.lp input.txt > solution.txt ```
+
 
 #### decoder (decode.py)
 python program that translates back the answer set into a complete shingoki solution, printing the result in standard output
@@ -32,4 +40,4 @@ the result should be written as follows:
 - show lines made of '|' & '-' displaying the connections
 
 execution example:
-```cligo shingokiKB.lpl shingokii1.lp | python decode.py > solution1.txt```
+```python decode.py solution.txt```
