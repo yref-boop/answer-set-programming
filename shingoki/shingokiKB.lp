@@ -1,3 +1,7 @@
+% Yago Fernández Rego
+% Adrián Rodríguez López
+
+
 % grid definition
 row (0..N-1) :- size (N).
 column (0..N-1) :- size (N).
