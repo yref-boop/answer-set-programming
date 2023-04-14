@@ -38,7 +38,7 @@ connected (X, Z) :- connected (X, Y), edge (Y, Z).
 :- ball (B), first (B'), B != B', not connected (B, B').
 
 % Connected all edges with first ball. This way, we only have one loop
-:- first(B), used(S), not connected(B,S).
+:- first(B), used(S), not connected (B,S).
 
 % white (positive) circles must be passed through a straight line
 horizontal (P) :- edge (P, (X,Y)), edge (P, (X',Y')), |Y-Y'| == 2.
@@ -56,15 +56,17 @@ straight (P) :- horizontal (P).
 % the number on each ball represents length of its two lines
 
 % check if two points are on the same axis (+)
-aligned_vertical ((X,Y), (X',Y)) :- edge ((X,Y), (X',Y)), number ((X,Y), _).
-aligned_vertical ((X,Y), (X',Y)) :- edge ((X,Y), (P,Y)), aligned_horizontal ((X',Y), (P,Y)).
+aligned_vertical ((X,Y), (X',Y)) :- edge ((X,Y), (X',Y)).
+aligned_vertical ((X,Y), (X',Y)) :- edge ((X,Y), (P,Y)), aligned_vertical ((X',Y), (P,Y)).
 
-aligned_horizontal ((X,Y), (X,Y')) :- edge ((X,Y), (X,Y')), number ((X,Y), _).
-aligned_horizontal ((X,Y), (X,Y')) :- edge ((X,Y), (X,P)), aligned_vertical ((X,Y'), (X,P)).
+aligned_horizontal ((X,Y), (X,Y')) :- edge ((X,Y), (X,Y')).
+aligned_horizontal ((X,Y), (X,Y')) :- edge ((X,Y), (X,P)), aligned_horizontal ((X,Y'), (X,P)).
 
-aligned (B, P) :- aligned_vertical (B, P).
-aligned (B, P) :- aligned_horizontal (B, P).
+aligned (B, P) :- edge (B, P), number (B, _).
+aligned ((X,Y), (X',Y)) :- number ((X,Y), _), edge ((X,Y), (P,Y)), aligned_vertical ((X',Y),(P,Y)), X != X'.
+aligned ((X,Y), (X,Y')) :- number ((X,Y), _), edge ((X,Y), (X,P)), aligned_horizontal ((X,Y'), (X,P)), Y!=Y'.
+
 
 % count itself
 :- number (B, N), N > 1, #count {P: aligned (B, P)} != N.
-:- number (B, N), -N > 1, #count {P: aligned (B, P)} != -N.
+:- number (B, N), N < -1, #count {P: aligned (B, P)} != -N.
