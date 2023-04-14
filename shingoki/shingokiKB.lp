@@ -41,8 +41,8 @@ connected (X, Z) :- connected (X, Y), edge (Y, Z).
 :- first(B), used(S), not connected (B,S).
 
 % white (positive) circles must be passed through a straight line
-horizontal (P) :- edge (P, (X,Y)), edge (P, (X',Y')), |Y-Y'| == 2.
-vertical (P)   :- edge (P, (X,Y)), edge (P, (X',Y')), |X-X'| == 2.
+horizontal (P) :- edge (P, (X,Y)), edge (P, (X,Y')), |Y-Y'| == 2.
+vertical (P)   :- edge (P, (X,Y)), edge (P, (X',Y)), |X-X'| == 2.
 
 straight (P) :- vertical (P).
 straight (P) :- horizontal (P).
