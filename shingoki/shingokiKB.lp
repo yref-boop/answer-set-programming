@@ -11,22 +11,22 @@ adjacent ((X, Y), (X, Y+1)) :- row (X), column (Y), column (Y+1).
 
 
 % generate segments between adjacent points
-{edge (P,Q)} :- adjacent (P,Q).
+{edge (P, Q)} :- adjacent (P, Q).
 % bidirectional segments are prefered
-edge (Q,P) :- edge (P,Q).
+edge (Q, P) :- edge (P, Q).
 
 % unidirectional segment used for graphical representation
-segment (P,Q) :- edge (P,Q), P < Q.
+segment (P, Q) :- edge (P, Q), P < Q.
 
 
 % check that, if node is used, it has two edges
 used (P) :- edge (P,_).
     % used needen't be biyective because edge already is
     % used (P) :- edge (_,P).
-:- used (P), #count {Q: edge (P,Q)} != 2.
+:- used (P), #count {Q: edge (P, Q)} != 2.
 
 % all numbered circles must be in a loop
-ball (B) :- number (B,N), N != 0.
+ball (B) :- number (B, N), N != 0.
 :- ball (B), not used (B).
 
 % get first ball
@@ -53,17 +53,18 @@ straight (P) :- horizontal (P).
 :- number (B, N), N < 0, straight (B).
 
 
-
 % the number on each ball represents length of its two lines
 
 % check if two points are on the same axis (+)
-axis_aligned (P, B) :- straight (P), edge (B, (BX,_)), edge (P, (PX,_)), BX == PX.
-axis_aligned (P, B) :- straight (P), edge (B, (_,BY)), edge (P, (_,PY)), BY == PY.
+aligned_vertical ((X,Y), (X',Y)) :- edge ((X,Y), (X',Y)), number ((X,Y), _).
+aligned_vertical ((X,Y), (X',Y)) :- edge ((X,Y), (P,Y)), aligned_horizontal ((X',Y), (P,Y)).
 
-% connected without corners
-contiguous (P, B) :- edge (P, B).
-contiguous (P, B) :- axis_aligned (P, B), straight (P'), edge (P', P), contiguous (P', B).
+aligned_horizontal ((X,Y), (X,Y')) :- edge ((X,Y), (X,Y')), number ((X,Y), _).
+aligned_horizontal ((X,Y), (X,Y')) :- edge ((X,Y), (X,P)), aligned_vertical ((X,Y'), (X,P)).
+
+aligned (B, P) :- aligned_vertical (B, P).
+aligned (B, P) :- aligned_horizontal (B, P).
 
 % count itself
-:- number (B, N), N > 1, #count {P: contiguous (P, B)} != N.
-
+:- number (B, N), N > 1, #count {P: aligned (B, P)} != N.
+:- number (B, N), -N > 1, #count {P: aligned (B, P)} != -N.
